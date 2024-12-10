@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var json = "Loading..."
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Goodbye, world!")
+            Text(json)
+        }
+        .task {
+            let url = URL(string: "https://newsapi.org/v2/everything?q=tesla&from=2024-11-10&sortBy=publishedAt&apiKey=2dabcf77f76642b9ac60ec1fd0bf31aa")!
+            let (data, _) = try! await URLSession.shared.data(from: url)
+            json = String(decoding: data, as: UTF8.self)
         }
         .padding()
     }
